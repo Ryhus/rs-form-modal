@@ -1,4 +1,5 @@
 import { createPortal } from 'react-dom';
+import { useEffect, useRef } from 'react';
 
 import './ModalStyles.scss';
 
@@ -8,8 +9,29 @@ interface ModalProps {
 }
 
 function Modal({ closeModal, modalType }: ModalProps) {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleEsc(e: KeyboardEvent) {
+      if (e.key === 'Escape') closeModal();
+    }
+
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [closeModal]);
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        closeModal();
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [closeModal]);
+
   return createPortal(
-    <div className="modal">
+    <div className="modal" ref={modalRef}>
       {modalType === 'modal1'
         ? 'This is the FIRST modal'
         : 'This is the SECOND modal'}
