@@ -1,0 +1,18 @@
+.modal-nav {
+  display: flex;
+  justify-content: center;
+  width: 50rem;
+  gap: 2rem;
+
+  .modal-1-bttn,
+  .modal-2-bttn {
+    width: 10rem;
+    height: 3rem;
+    cursor: pointer;
+  }
+
+  .modal-1-bttn:disabled,
+  .modal-2-bttn:disabled {
+    cursor: default;
+  }
+}
