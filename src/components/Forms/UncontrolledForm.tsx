@@ -1,13 +1,17 @@
 import { useState } from 'react';
 
 import { Input } from './Input';
-import { COUNTIRIES } from '@/utils/data';
+
+import { useFormStore } from '@/stores/FormStore';
+import { useCountriesStore } from '@/stores/CountriesStore';
 import { validateUser } from '@/utils/validation';
 
 import './FormsStyles.scss';
 
 function UncontrolledForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const { setFormData } = useFormStore();
+  const { countries } = useCountriesStore();
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,7 +26,7 @@ function UncontrolledForm() {
     if (errors) {
       setErrors(errors);
     } else {
-      console.log('Valid form data:', validData);
+      if (validData) setFormData(validData);
     }
   };
 
@@ -63,7 +67,7 @@ function UncontrolledForm() {
           errorMessage={errors['country']}
         ></Input>
         <datalist id="countries">
-          {COUNTIRIES.map((country) => (
+          {countries.map((country) => (
             <option key={country} value={country}></option>
           ))}
         </datalist>

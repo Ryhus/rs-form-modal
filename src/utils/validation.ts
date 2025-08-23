@@ -7,10 +7,11 @@ import {
   type InferType,
 } from 'yup';
 
-import { COUNTIRIES } from './data';
-
 const SUPPORTED_FORMATS = ['image/jpeg', 'image/png'];
 const FILE_SIZE = 2 * 1024 * 1024;
+
+import { useCountriesStore } from '@/stores/CountriesStore';
+const countries = useCountriesStore.getState().countries;
 
 export const userSchema = object({
   name: string()
@@ -49,7 +50,7 @@ export const userSchema = object({
 
   country: string()
     .required('Pls, select a country')
-    .oneOf(COUNTIRIES, 'Pls, choose coutries from the list'),
+    .oneOf(countries, 'Pls, choose coutries from the list'),
 
   password: string()
     .required('Pls, enter your password')

@@ -4,11 +4,16 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Input } from './Input';
 
 import { userSchema, type UserFormValues } from '@/utils/validation';
-import { COUNTIRIES } from '@/utils/data';
+
+import { useFormStore } from '@/stores/FormStore';
+import { useCountriesStore } from '@/stores/CountriesStore';
 
 import './FormsStyles.scss';
 
 export default function ControlledForm() {
+  const { setFormData } = useFormStore();
+  const { countries } = useCountriesStore();
+
   const {
     control,
     handleSubmit,
@@ -29,7 +34,7 @@ export default function ControlledForm() {
   });
 
   const onSubmit = (data: UserFormValues) => {
-    console.log('Valid form data:', data);
+    setFormData(data);
   };
 
   return (
@@ -94,8 +99,8 @@ export default function ControlledForm() {
                 errorMessage={errors.country?.message}
               />
               <datalist id="countries">
-                {COUNTIRIES.map((c) => (
-                  <option key={c} value={c} />
+                {countries.map((country) => (
+                  <option key={country} value={country} />
                 ))}
               </datalist>
             </>
