@@ -17,7 +17,7 @@ function UncontrolledForm() {
     for (const pair of formData.entries()) {
       data[pair[0]] = pair[1];
     }
-
+    console.log(data);
     const { validData, errors } = await validateUser(data);
     if (errors) {
       setErrors(errors);
@@ -126,7 +126,7 @@ function UncontrolledForm() {
           labelText="I agry with terms and conditions"
           className="tearms-field"
         ></Input>
-        {errors['gender'] && (
+        {errors['termsAndConditions'] && (
           <p className="input-error-message">{errors['termsAndConditions']}</p>
         )}
       </fieldset>
