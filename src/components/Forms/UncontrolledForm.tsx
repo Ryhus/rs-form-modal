@@ -1,9 +1,15 @@
+import { useState } from 'react';
+
 import { Input } from './Input';
+import { COUNTIRIES } from '@/utils/data';
+import { validateUser } from '@/utils/validation';
 
 import './FormsStyles.scss';
 
 function UncontrolledForm() {
-  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data: Record<string, FormDataEntryValue> = {};
@@ -11,26 +17,56 @@ function UncontrolledForm() {
     for (const pair of formData.entries()) {
       data[pair[0]] = pair[1];
     }
-    console.log(data);
+
+    const { validData, errors } = await validateUser(data);
+    if (errors) {
+      setErrors(errors);
+    } else {
+      console.log('Valid form data:', validData);
+    }
   };
 
   return (
     <form className="form-container" onSubmit={handleFormSubmit}>
       <fieldset>
         <legend className="sr-only">Contact Information</legend>
-        <Input name="email" id="email" type="email" labelText="Email"></Input>
+        <Input
+          name="email"
+          id="email"
+          type="text"
+          labelText="Email"
+          errorMessage={errors['email']}
+        ></Input>
       </fieldset>
 
       <fieldset>
         <legend className="sr-only">Personal Information</legend>
-        <Input name="name" id="name" type="text" labelText="Name"></Input>
-        <Input name="age" id="age" type="number" labelText="Age"></Input>
+        <Input
+          name="name"
+          id="name"
+          type="text"
+          labelText="Name"
+          errorMessage={errors['name']}
+        ></Input>
+        <Input
+          name="age"
+          id="age"
+          type="text"
+          labelText="Age"
+          errorMessage={errors['age']}
+        ></Input>
         <Input
           name="country"
+          list="countries"
           id="country"
-          type="text"
           labelText="Country"
+          errorMessage={errors['country']}
         ></Input>
+        <datalist id="countries">
+          {COUNTIRIES.map((country) => (
+            <option key={country} value={country}></option>
+          ))}
+        </datalist>
 
         <div className="gender-radio-container">
           <Input
@@ -50,12 +86,16 @@ function UncontrolledForm() {
             className="gender-radio"
           ></Input>
         </div>
+        {errors['gender'] && (
+          <p className="input-error-message">{errors['gender']}</p>
+        )}
 
         <Input
           name="picture"
           id="picture"
           type="file"
           labelText="Picture"
+          errorMessage={errors['picture']}
         ></Input>
       </fieldset>
 
@@ -66,12 +106,14 @@ function UncontrolledForm() {
           id="password"
           type="text"
           labelText="Password"
+          errorMessage={errors['password']}
         ></Input>
         <Input
           name="confirmedPassword"
           id="confirmedPassword"
           type="text"
           labelText="Confirm password"
+          errorMessage={errors['confirmedPassword']}
         ></Input>
       </fieldset>
 
@@ -84,6 +126,9 @@ function UncontrolledForm() {
           labelText="I agry with terms and conditions"
           className="tearms-field"
         ></Input>
+        {errors['gender'] && (
+          <p className="input-error-message">{errors['termsAndConditions']}</p>
+        )}
       </fieldset>
 
       <button type="submit" className="submit-form-bttn">
