@@ -1,7 +1,6 @@
 import {
   object,
   string,
-  number,
   mixed,
   ValidationError,
   ref,
@@ -13,20 +12,20 @@ import { COUNTIRIES } from './data';
 const SUPPORTED_FORMATS = ['image/jpeg', 'image/png'];
 const FILE_SIZE = 2 * 1024 * 1024;
 
-const userSchema = object({
+export const userSchema = object({
   name: string()
     .required('Pls, enter your name')
     .matches(/^[A-Za-z]+$/, 'Name must contain only letters')
     .matches(/^[A-Z][a-zA-Z]*$/, 'First letter must be uppercase'),
 
-  age: number()
-    .typeError('Pls, enter a valid number')
+  age: string()
     .required('Pls, enter your age')
+    .matches(/^\d+$/, 'Pls, enter a valid non-negative number')
     .min(0, 'Age must be non negative'),
 
   email: string()
     .required('Pls, enter your email')
-    .email('Pls, enter a valid email address'),
+    .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Pls, enter a valid email address'),
 
   gender: string().required('Pls, choose your gender'),
 
@@ -68,7 +67,7 @@ const userSchema = object({
     .oneOf([ref('password')], 'Passwords must match'),
 });
 
-type UserFormValues = InferType<typeof userSchema>;
+export type UserFormValues = InferType<typeof userSchema>;
 
 export async function validateUser(
   data: Record<string, FormDataEntryValue>

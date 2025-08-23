@@ -124,7 +124,7 @@ function UncontrolledForm() {
           id="termsAndConditions"
           type="checkbox"
           labelText="I agry with terms and conditions"
-          className="tearms-field"
+          className="terms-field"
         ></Input>
         {errors['termsAndConditions'] && (
           <p className="input-error-message">{errors['termsAndConditions']}</p>

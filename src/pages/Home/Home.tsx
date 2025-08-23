@@ -16,9 +16,10 @@ function Home() {
 
   return (
     <div className="home-page">
-      <ModalNavigation openModal={handleOpenModal} openedModal={openedModal} />
-      {openedModal && (
+      {openedModal ? (
         <Modal closeModal={handleCloseModal} modalType={openedModal} />
+      ) : (
+        <ModalNavigation openModal={handleOpenModal} />
       )}
     </div>
   );

@@ -33,7 +33,7 @@
     }
   }
 
-  .tearms-field {
+  .terms-field {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -59,6 +59,12 @@
     &:focus {
       background-color: #4338ca;
       outline: none;
+    }
+
+    &:disabled {
+      background-color: #a5b4fc;
+      cursor: default;
+      opacity: 0.6;
     }
   }
 }

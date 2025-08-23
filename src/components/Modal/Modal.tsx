@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import { useEffect, useRef } from 'react';
 
-import { UncontrolledForm } from '@/components';
+import { UncontrolledForm, ControlledForm } from '@/components';
 
 import './ModalStyles.scss';
 
@@ -34,11 +34,7 @@ function Modal({ closeModal, modalType }: ModalProps) {
 
   return createPortal(
     <div className="modal" ref={modalRef}>
-      {modalType === 'modal1' ? (
-        <UncontrolledForm />
-      ) : (
-        'This is the SECOND modal'
-      )}
+      {modalType === 'modal1' ? <UncontrolledForm /> : <ControlledForm />}
       <button className="close-modal-bttn" onClick={closeModal}>
         &times;
       </button>
