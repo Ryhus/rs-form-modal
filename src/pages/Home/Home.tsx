@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ModalNavigation, Modal } from '@/components';
+import { ModalNavigation, Modal, UserList } from '@/components';
 
 import './HomeStyles.scss';
 
@@ -19,7 +19,10 @@ function Home() {
       {openedModal ? (
         <Modal closeModal={handleCloseModal} modalType={openedModal} />
       ) : (
-        <ModalNavigation openModal={handleOpenModal} />
+        <>
+          <ModalNavigation openModal={handleOpenModal} />
+          <UserList />
+        </>
       )}
     </div>
   );

@@ -1,6 +1,7 @@
 .home-page {
-  margin-top: 10rem;
   display: flex;
-  height: 100vh;
+  flex-direction: column;
   justify-content: center;
+  align-items: center;
+  gap: 5rem;
 }

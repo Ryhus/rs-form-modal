@@ -5,28 +5,38 @@ import { Input } from './Input';
 import { useFormStore } from '@/stores/FormStore';
 import { useCountriesStore } from '@/stores/CountriesStore';
 import { validateUser } from '@/utils/validation';
-
+import { fileToBase64 } from '@/utils/fileConversions';
 import './FormsStyles.scss';
 
 function UncontrolledForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const { setFormData } = useFormStore();
+  const { addFormSubmission } = useFormStore();
   const { countries } = useCountriesStore();
 
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     const formData = new FormData(e.currentTarget);
     const data: Record<string, FormDataEntryValue> = {};
 
     for (const pair of formData.entries()) {
       data[pair[0]] = pair[1];
     }
-    console.log(data);
+
     const { validData, errors } = await validateUser(data);
+
     if (errors) {
       setErrors(errors);
-    } else {
-      if (validData) setFormData(validData);
+    } else if (validData) {
+      let pictureBase64: string | null = null;
+      if (validData.picture instanceof File) {
+        pictureBase64 = await fileToBase64(validData.picture);
+      }
+
+      addFormSubmission({
+        ...validData,
+        picture: pictureBase64,
+      });
     }
   };
 

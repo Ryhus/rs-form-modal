@@ -2,12 +2,19 @@ import { create } from 'zustand';
 
 import type { UserFormValues } from '@/utils/validation';
 
+export interface UserFormData extends Omit<UserFormValues, 'picture'> {
+  picture: string | null;
+}
+
 interface FormDataState {
-  formData: UserFormValues | null;
-  setFormData: (data: UserFormValues) => void;
+  formSubmissions: UserFormData[];
+  addFormSubmission: (data: UserFormData) => void;
 }
 
 export const useFormStore = create<FormDataState>((set) => ({
-  formData: null,
-  setFormData: (data) => set({ formData: data }),
+  formSubmissions: [],
+  addFormSubmission: (data) =>
+    set((state) => ({
+      formSubmissions: [...state.formSubmissions, data],
+    })),
 }));

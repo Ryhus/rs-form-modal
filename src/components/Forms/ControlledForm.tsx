@@ -7,11 +7,12 @@ import { userSchema, type UserFormValues } from '@/utils/validation';
 
 import { useFormStore } from '@/stores/FormStore';
 import { useCountriesStore } from '@/stores/CountriesStore';
+import { fileToBase64 } from '@/utils/fileConversions';
 
 import './FormsStyles.scss';
 
 export default function ControlledForm() {
-  const { setFormData } = useFormStore();
+  const { addFormSubmission } = useFormStore();
   const { countries } = useCountriesStore();
 
   const {
@@ -33,8 +34,16 @@ export default function ControlledForm() {
     mode: 'onChange',
   });
 
-  const onSubmit = (data: UserFormValues) => {
-    setFormData(data);
+  const onSubmit = async (data: UserFormValues) => {
+    let pictureBase64: string | null = null;
+    if (data.picture instanceof File) {
+      pictureBase64 = await fileToBase64(data.picture);
+    }
+
+    addFormSubmission({
+      ...data,
+      picture: pictureBase64,
+    });
   };
 
   return (
