@@ -6,11 +6,16 @@
   label {
     font-size: 1.5rem;
   }
-  input {
+
+  .input-field {
     width: 32rem;
     height: 3.5rem;
     border-radius: 1.5rem;
     padding: 1rem;
     font-size: 1.5rem;
+
+    &--error {
+      border-color: red;
+    }
   }
 }

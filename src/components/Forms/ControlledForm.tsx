@@ -1,12 +1,21 @@
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { Input } from './Input';
-import FormErrorMessage from './FormErrorMessage/FormErrorMessage';
-import { userSchema, type UserFormValues } from '@/utils/validation';
+import {
+  Input,
+  FormErrorMessage,
+  PasswordStrengthIndicator,
+} from '@/components';
+
+import {
+  userSchema,
+  checkStrength,
+  type UserFormValues,
+} from '@/utils/validation';
 
 import { useFormStore } from '@/stores/FormStore';
 import { useCountriesStore } from '@/stores/CountriesStore';
+
 import { fileToBase64 } from '@/utils/fileConversions';
 
 import './FormsStyles.scss';
@@ -33,23 +42,6 @@ export default function ControlledForm() {
     },
     mode: 'onChange',
   });
-
-  const checkStrength = (pw: string) => {
-    const checks = [
-      pw.length >= 8,
-      /[0-9]/.test(pw),
-      /[A-Z]/.test(pw),
-      /[a-z]/.test(pw),
-      /[!@#$%^&*(),.?":{}|<>]/.test(pw),
-    ];
-    return checks.filter(Boolean).length;
-  };
-
-  const getCircleColor = (strength: number) => {
-    if (strength <= 2) return 'red';
-    if (strength === 3 || strength === 4) return 'yellow';
-    if (strength === 5) return 'green';
-  };
 
   const onSubmit = async (data: UserFormValues) => {
     let pictureBase64: string | null = null;
@@ -200,9 +192,7 @@ export default function ControlledForm() {
           name="password"
           control={control}
           render={({ field }) => {
-            const strengthLevel = getCircleColor(
-              checkStrength(field.value || '')
-            );
+            const strength = checkStrength(field.value);
             return (
               <>
                 <Input
@@ -213,11 +203,7 @@ export default function ControlledForm() {
                   errorMessage={errors.password?.message}
                 />
                 <div className="password-erorr-container">
-                  <span
-                    className="password-strength-circle"
-                    style={{ backgroundColor: strengthLevel }}
-                  />
-                  <FormErrorMessage errorMessage={errors.password?.message} />
+                  <PasswordStrengthIndicator strengthObject={strength} />
                 </div>
               </>
             );

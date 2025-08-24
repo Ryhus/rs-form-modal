@@ -7,6 +7,9 @@ import {
   type InferType,
 } from 'yup';
 
+type StrengthKey = 'length' | 'numb' | 'upper' | 'lower' | 'special';
+type StrengthMap = Record<StrengthKey, boolean>;
+
 const SUPPORTED_FORMATS = ['image/jpeg', 'image/png'];
 const FILE_SIZE = 2 * 1024 * 1024;
 
@@ -91,4 +94,22 @@ export async function validateUser(
     }
     throw err;
   }
+}
+
+export const strengthRules: Array<{ key: StrengthKey; label: string }> = [
+  { key: 'length', label: 'Must be at least 8 characters long' },
+  { key: 'numb', label: 'Must contain at least one number' },
+  { key: 'upper', label: 'Must contain at least one uppercase letter' },
+  { key: 'lower', label: 'Must contain at least one lowercase letter' },
+  { key: 'special', label: 'Must contain at least one special character' },
+];
+
+export function checkStrength(pw: string): StrengthMap {
+  return {
+    length: pw.length >= 8,
+    numb: /[0-9]/.test(pw),
+    upper: /[A-Z]/.test(pw),
+    lower: /[a-z]/.test(pw),
+    special: /[!@#$%^&*(),.?":{}|<>]/.test(pw),
+  };
 }

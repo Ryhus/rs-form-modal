@@ -65,18 +65,4 @@
       opacity: 0.6;
     }
   }
-  .password-erorr-container {
-    display: flex;
-    flex-direction: row;
-    gap: 0.5rem;
-    align-items: center;
-
-    .password-strength-circle {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      display: inline-block;
-      transition: background-color 0.3s ease;
-    }
-  }
 }

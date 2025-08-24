@@ -18,7 +18,7 @@ function Input({
   value,
   checked,
   id,
-  type,
+  type = 'text',
   labelText,
   list,
   className = '',
@@ -26,7 +26,7 @@ function Input({
   errorMessage,
 }: InputProps) {
   return (
-    <div className={`input-container ${className}`}>
+    <div className={`input-container input-container__${type}  ${className}`}>
       <label htmlFor={id}>{labelText}</label>
       <input
         name={name}
@@ -35,7 +35,9 @@ function Input({
         value={value}
         checked={checked}
         list={list}
-        className={errorMessage ? 'input-error' : ''}
+        className={`input-field input-field__${type} ${
+          errorMessage ? 'input-field--error' : ''
+        }`}
         onChange={onChange}
       ></input>
     </div>

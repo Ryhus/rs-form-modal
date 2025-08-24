@@ -1,15 +1,25 @@
 import { useState } from 'react';
 
-import { Input } from './Input';
+import {
+  Input,
+  FormErrorMessage,
+  PasswordStrengthIndicator,
+} from '@/components';
 
 import { useFormStore } from '@/stores/FormStore';
 import { useCountriesStore } from '@/stores/CountriesStore';
-import { validateUser } from '@/utils/validation';
+
+import { validateUser, checkStrength } from '@/utils/validation';
 import { fileToBase64 } from '@/utils/fileConversions';
+
+import { type PasswordStrengthRules } from './types';
+
 import './FormsStyles.scss';
 
 function UncontrolledForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [passwordStrength, setPasswordStrength] =
+    useState<PasswordStrengthRules | null>(null);
 
   const { addFormSubmission } = useFormStore();
   const { countries } = useCountriesStore();
@@ -24,10 +34,13 @@ function UncontrolledForm() {
       data[pair[0]] = pair[1];
     }
 
+    const strength = checkStrength(data.password as string);
+
     const { validData, errors } = await validateUser(data);
 
     if (errors) {
       setErrors(errors);
+      setPasswordStrength(strength);
     } else if (validData) {
       let pictureBase64: string | null = null;
       if (validData.picture instanceof File) {
@@ -52,6 +65,7 @@ function UncontrolledForm() {
           labelText="Email"
           errorMessage={errors['email']}
         ></Input>
+        <FormErrorMessage errorMessage={errors['email']} />
       </fieldset>
 
       <fieldset>
@@ -63,6 +77,8 @@ function UncontrolledForm() {
           labelText="Name"
           errorMessage={errors['name']}
         ></Input>
+        <FormErrorMessage errorMessage={errors['name']} />
+
         <Input
           name="age"
           id="age"
@@ -70,6 +86,8 @@ function UncontrolledForm() {
           labelText="Age"
           errorMessage={errors['age']}
         ></Input>
+        <FormErrorMessage errorMessage={errors['age']} />
+
         <Input
           name="country"
           list="countries"
@@ -77,6 +95,7 @@ function UncontrolledForm() {
           labelText="Country"
           errorMessage={errors['country']}
         ></Input>
+        <FormErrorMessage errorMessage={errors['country']} />
         <datalist id="countries">
           {countries.map((country) => (
             <option key={country} value={country}></option>
@@ -101,9 +120,7 @@ function UncontrolledForm() {
             className="gender-radio"
           ></Input>
         </div>
-        {errors['gender'] && (
-          <p className="input-error-message">{errors['gender']}</p>
-        )}
+        <FormErrorMessage errorMessage={errors['gender']} />
 
         <Input
           name="picture"
@@ -112,6 +129,7 @@ function UncontrolledForm() {
           labelText="Picture"
           errorMessage={errors['picture']}
         ></Input>
+        <FormErrorMessage errorMessage={errors['picture']} />
       </fieldset>
 
       <fieldset>
@@ -123,6 +141,8 @@ function UncontrolledForm() {
           labelText="Password"
           errorMessage={errors['password']}
         ></Input>
+        <PasswordStrengthIndicator strengthObject={passwordStrength} />
+
         <Input
           name="confirmedPassword"
           id="confirmedPassword"
@@ -130,6 +150,7 @@ function UncontrolledForm() {
           labelText="Confirm password"
           errorMessage={errors['confirmedPassword']}
         ></Input>
+        <FormErrorMessage errorMessage={errors['confirmedPassword']} />
       </fieldset>
 
       <fieldset>
@@ -141,9 +162,7 @@ function UncontrolledForm() {
           labelText="I agry with terms and conditions"
           className="terms-field"
         ></Input>
-        {errors['termsAndConditions'] && (
-          <p className="input-error-message">{errors['termsAndConditions']}</p>
-        )}
+        <FormErrorMessage errorMessage={errors['termsAndConditions']} />
       </fieldset>
 
       <button type="submit" className="submit-form-bttn">
