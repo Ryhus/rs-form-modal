@@ -38,7 +38,6 @@ function Input({
         className={errorMessage ? 'input-error' : ''}
         onChange={onChange}
       ></input>
-      {errorMessage && <p className="input-error-message">{errorMessage}</p>}
     </div>
   );
 }

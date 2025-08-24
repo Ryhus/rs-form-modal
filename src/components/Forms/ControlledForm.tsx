@@ -2,7 +2,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Input } from './Input';
-
+import FormErrorMessage from './FormErrorMessage/FormErrorMessage';
 import { userSchema, type UserFormValues } from '@/utils/validation';
 
 import { useFormStore } from '@/stores/FormStore';
@@ -34,6 +34,23 @@ export default function ControlledForm() {
     mode: 'onChange',
   });
 
+  const checkStrength = (pw: string) => {
+    const checks = [
+      pw.length >= 8,
+      /[0-9]/.test(pw),
+      /[A-Z]/.test(pw),
+      /[a-z]/.test(pw),
+      /[!@#$%^&*(),.?":{}|<>]/.test(pw),
+    ];
+    return checks.filter(Boolean).length;
+  };
+
+  const getCircleColor = (strength: number) => {
+    if (strength <= 2) return 'red';
+    if (strength === 3 || strength === 4) return 'yellow';
+    if (strength === 5) return 'green';
+  };
+
   const onSubmit = async (data: UserFormValues) => {
     let pictureBase64: string | null = null;
     if (data.picture instanceof File) {
@@ -54,13 +71,16 @@ export default function ControlledForm() {
           name="email"
           control={control}
           render={({ field }) => (
-            <Input
-              {...field}
-              id="email"
-              type="text"
-              labelText="Email"
-              errorMessage={errors.email?.message}
-            />
+            <>
+              <Input
+                {...field}
+                id="email"
+                type="text"
+                labelText="Email"
+                errorMessage={errors.email?.message}
+              />
+              <FormErrorMessage errorMessage={errors.email?.message} />
+            </>
           )}
         />
       </fieldset>
@@ -71,13 +91,16 @@ export default function ControlledForm() {
           name="name"
           control={control}
           render={({ field }) => (
-            <Input
-              {...field}
-              id="name"
-              type="text"
-              labelText="Name"
-              errorMessage={errors.name?.message}
-            />
+            <>
+              <Input
+                {...field}
+                id="name"
+                type="text"
+                labelText="Name"
+                errorMessage={errors.name?.message}
+              />
+              <FormErrorMessage errorMessage={errors.name?.message} />
+            </>
           )}
         />
 
@@ -85,13 +108,16 @@ export default function ControlledForm() {
           name="age"
           control={control}
           render={({ field }) => (
-            <Input
-              {...field}
-              id="age"
-              type="text"
-              labelText="Age"
-              errorMessage={errors.age?.message}
-            />
+            <>
+              <Input
+                {...field}
+                id="age"
+                type="text"
+                labelText="Age"
+                errorMessage={errors.age?.message}
+              />
+              <FormErrorMessage errorMessage={errors.age?.message} />
+            </>
           )}
         />
 
@@ -107,6 +133,7 @@ export default function ControlledForm() {
                 labelText="Country"
                 errorMessage={errors.country?.message}
               />
+              <FormErrorMessage errorMessage={errors.country?.message} />
               <datalist id="countries">
                 {countries.map((country) => (
                   <option key={country} value={country} />
@@ -130,6 +157,7 @@ export default function ControlledForm() {
                   labelText="Male"
                   className="gender-radio"
                 />
+
                 <Input
                   {...field}
                   id="female"
@@ -141,6 +169,7 @@ export default function ControlledForm() {
               </>
             )}
           />
+          <FormErrorMessage errorMessage={errors.gender?.message} />
         </div>
         {errors.gender && (
           <p className="input-error-message">{errors.gender.message}</p>
@@ -150,15 +179,18 @@ export default function ControlledForm() {
           name="picture"
           control={control}
           render={({ field }) => (
-            <Input
-              {...field}
-              value={undefined}
-              onChange={(e) => field.onChange(e.target.files?.[0] ?? null)}
-              id="picture"
-              type="file"
-              labelText="Picture"
-              errorMessage={errors.picture?.message}
-            />
+            <>
+              <Input
+                {...field}
+                value={undefined}
+                onChange={(e) => field.onChange(e.target.files?.[0] ?? null)}
+                id="picture"
+                type="file"
+                labelText="Picture"
+                errorMessage={errors.picture?.message}
+              />
+              <FormErrorMessage errorMessage={errors.picture?.message} />
+            </>
           )}
         />
       </fieldset>
@@ -167,28 +199,47 @@ export default function ControlledForm() {
         <Controller
           name="password"
           control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              id="password"
-              type="password"
-              labelText="Password"
-              errorMessage={errors.password?.message}
-            />
-          )}
+          render={({ field }) => {
+            const strengthLevel = getCircleColor(
+              checkStrength(field.value || '')
+            );
+            return (
+              <>
+                <Input
+                  {...field}
+                  id="password"
+                  type="password"
+                  labelText="Password"
+                  errorMessage={errors.password?.message}
+                />
+                <div className="password-erorr-container">
+                  <span
+                    className="password-strength-circle"
+                    style={{ backgroundColor: strengthLevel }}
+                  />
+                  <FormErrorMessage errorMessage={errors.password?.message} />
+                </div>
+              </>
+            );
+          }}
         />
 
         <Controller
           name="confirmedPassword"
           control={control}
           render={({ field }) => (
-            <Input
-              {...field}
-              id="confirmedPassword"
-              type="password"
-              labelText="Confirm Password"
-              errorMessage={errors.confirmedPassword?.message}
-            />
+            <>
+              <Input
+                {...field}
+                id="confirmedPassword"
+                type="password"
+                labelText="Confirm Password"
+                errorMessage={errors.confirmedPassword?.message}
+              />
+              <FormErrorMessage
+                errorMessage={errors.confirmedPassword?.message}
+              />
+            </>
           )}
         />
       </fieldset>
@@ -208,11 +259,9 @@ export default function ControlledForm() {
                 labelText="I agree with terms and conditions"
                 className="terms-field"
               />
-              {errors.termsAndConditions && (
-                <p className="input-error-message">
-                  {errors.termsAndConditions.message}
-                </p>
-              )}
+              <FormErrorMessage
+                errorMessage={errors.termsAndConditions?.message}
+              />
             </>
           )}
         />

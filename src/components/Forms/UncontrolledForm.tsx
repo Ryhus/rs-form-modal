@@ -10,6 +10,7 @@ import './FormsStyles.scss';
 
 function UncontrolledForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
+
   const { addFormSubmission } = useFormStore();
   const { countries } = useCountriesStore();
 

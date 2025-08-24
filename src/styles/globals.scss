@@ -1,14 +1,9 @@
 @use './base/reset';
 
 #modal-overlay {
-  position: fixed;
-  top: 50%;
-  left: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  transform: translate(-50%, -50%);
 }
 
 .sr-only {
