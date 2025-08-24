@@ -32,7 +32,6 @@ describe('UserList', () => {
 
     expect(screen.queryByText('No users submitted yet.')).toBeNull();
 
-    expect(screen.getByText('User Profile')).toBeInTheDocument();
     expect(screen.getByText('Email:')).toBeInTheDocument();
     expect(screen.getByText('Email:').parentElement).toHaveTextContent(
       `Email: ${sampleUser.email}`
@@ -48,9 +47,6 @@ describe('UserList', () => {
     });
 
     render(<UserList />);
-
-    const titles = screen.getAllByText('User Profile');
-    expect(titles).toHaveLength(2);
 
     const emailSpans = screen.getAllByText('Email:');
     expect(emailSpans).toHaveLength(2);

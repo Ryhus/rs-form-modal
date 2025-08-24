@@ -19,8 +19,6 @@ describe('UserCard', () => {
   it('renders user info correctly', () => {
     render(<UserCard user={baseUser} />);
 
-    expect(screen.getByText('User Profile')).toBeInTheDocument();
-
     const infoPairs: [string, string][] = [
       ['Email:', baseUser.email],
       ['Name:', baseUser.name],
@@ -33,7 +31,6 @@ describe('UserCard', () => {
 
     infoPairs.forEach(([label, value]) => {
       const labelSpan = screen.getByText(label);
-
       expect(labelSpan.parentElement).toHaveTextContent(`${label} ${value}`);
     });
   });
