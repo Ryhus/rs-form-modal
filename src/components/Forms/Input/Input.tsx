@@ -29,8 +29,15 @@ function Input({
   rightIcon,
   onChange,
 }: InputProps) {
+  const inputContainerClass =
+    `input-container input-container__${type}  ${className}`.trim();
+
+  const inputFieldClass = `input-field input-field__${type} ${
+    errorMessage ? 'input-field--error' : ''
+  } ${rightIcon ? 'input-field--right-icon' : ''}`.trim();
+
   return (
-    <div className={`input-container input-container__${type}  ${className}`}>
+    <div className={inputContainerClass}>
       <label htmlFor={id}>{labelText}</label>
       <div className="input-wrapper">
         <input
@@ -40,9 +47,7 @@ function Input({
           value={value}
           checked={checked}
           list={list}
-          className={`input-field input-field__${type} ${
-            errorMessage ? 'input-field--error' : ''
-          } ${rightIcon ? 'input-field--right-icon' : ''}`}
+          className={inputFieldClass}
           onChange={onChange}
         ></input>
         {rightIcon && (

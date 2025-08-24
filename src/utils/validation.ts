@@ -6,6 +6,7 @@ import {
   ref,
   type InferType,
 } from 'yup';
+import { useCountriesStore } from '@/stores/CountriesStore';
 
 type StrengthKey = 'length' | 'numb' | 'upper' | 'lower' | 'special';
 type StrengthMap = Record<StrengthKey, boolean>;
@@ -13,7 +14,6 @@ type StrengthMap = Record<StrengthKey, boolean>;
 const SUPPORTED_FORMATS = ['image/jpeg', 'image/png'];
 const FILE_SIZE = 2 * 1024 * 1024;
 
-import { useCountriesStore } from '@/stores/CountriesStore';
 const countries = useCountriesStore.getState().countries;
 
 export const userSchema = object({
