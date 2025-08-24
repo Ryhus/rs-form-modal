@@ -20,6 +20,8 @@ function UncontrolledForm() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [passwordStrength, setPasswordStrength] =
     useState<PasswordStrengthRules | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
 
   const { addFormSubmission } = useFormStore();
   const { countries } = useCountriesStore();
@@ -137,18 +139,36 @@ function UncontrolledForm() {
         <Input
           name="password"
           id="password"
-          type="text"
+          type={showPassword ? 'text' : 'password'}
           labelText="Password"
           errorMessage={errors['password']}
+          rightIcon={
+            <button
+              type="button"
+              className="icon-button"
+              onClick={() => setShowPassword((prev) => !prev)}
+            >
+              {showPassword ? '🕶️' : '👁️'}
+            </button>
+          }
         ></Input>
         <PasswordStrengthIndicator strengthObject={passwordStrength} />
 
         <Input
           name="confirmedPassword"
           id="confirmedPassword"
-          type="text"
+          type={showConfirmedPassword ? 'text' : 'password'}
           labelText="Confirm password"
           errorMessage={errors['confirmedPassword']}
+          rightIcon={
+            <button
+              type="button"
+              className="icon-button"
+              onClick={() => setShowConfirmedPassword((prev) => !prev)}
+            >
+              {showConfirmedPassword ? '🕶️' : '👁️'}
+            </button>
+          }
         ></Input>
         <FormErrorMessage errorMessage={errors['confirmedPassword']} />
       </fieldset>

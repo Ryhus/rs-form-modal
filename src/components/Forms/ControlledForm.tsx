@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -21,6 +22,9 @@ import { fileToBase64 } from '@/utils/fileConversions';
 import './FormsStyles.scss';
 
 export default function ControlledForm() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
+
   const { addFormSubmission } = useFormStore();
   const { countries } = useCountriesStore();
 
@@ -90,6 +94,7 @@ export default function ControlledForm() {
                 type="text"
                 labelText="Name"
                 errorMessage={errors.name?.message}
+                leftIcon={<>🔆</>}
               />
               <FormErrorMessage errorMessage={errors.name?.message} />
             </>
@@ -198,9 +203,18 @@ export default function ControlledForm() {
                 <Input
                   {...field}
                   id="password"
-                  type="password"
+                  type={showPassword ? 'text' : 'password'}
                   labelText="Password"
                   errorMessage={errors.password?.message}
+                  rightIcon={
+                    <button
+                      type="button"
+                      className="icon-button"
+                      onClick={() => setShowPassword((prev) => !prev)}
+                    >
+                      {showPassword ? '🕶️' : '👁️'}
+                    </button>
+                  }
                 />
                 <div className="password-erorr-container">
                   <PasswordStrengthIndicator strengthObject={strength} />
@@ -218,9 +232,18 @@ export default function ControlledForm() {
               <Input
                 {...field}
                 id="confirmedPassword"
-                type="password"
+                type={showConfirmedPassword ? 'text' : 'password'}
                 labelText="Confirm Password"
                 errorMessage={errors.confirmedPassword?.message}
+                rightIcon={
+                  <button
+                    type="button"
+                    className="icon-button"
+                    onClick={() => setShowConfirmedPassword((prev) => !prev)}
+                  >
+                    {showConfirmedPassword ? '🕶️' : '👁️'}
+                  </button>
+                }
               />
               <FormErrorMessage
                 errorMessage={errors.confirmedPassword?.message}
