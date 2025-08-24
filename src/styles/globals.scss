@@ -1,1 +1,24 @@
 @use './base/reset';
+
+#modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.input-error-message {
+  font-size: 1.5rem;
+  color: red;
+}
