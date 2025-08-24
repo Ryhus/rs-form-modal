@@ -16,7 +16,11 @@ import { type PasswordStrengthRules } from './types';
 
 import './FormsStyles.scss';
 
-function UncontrolledForm() {
+interface UncontrolledFormProps {
+  onSuccess?: () => void;
+}
+
+function UncontrolledForm({ onSuccess }: UncontrolledFormProps) {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [passwordStrength, setPasswordStrength] =
     useState<PasswordStrengthRules | null>(null);
@@ -53,6 +57,7 @@ function UncontrolledForm() {
         ...validData,
         picture: pictureBase64,
       });
+      if (onSuccess) onSuccess();
     }
   };
 

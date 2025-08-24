@@ -34,7 +34,11 @@ function Modal({ closeModal, modalType }: ModalProps) {
 
   return createPortal(
     <div className="modal" ref={modalRef}>
-      {modalType === 'modal1' ? <UncontrolledForm /> : <ControlledForm />}
+      {modalType === 'modal1' ? (
+        <UncontrolledForm onSuccess={closeModal} />
+      ) : (
+        <ControlledForm onSuccess={closeModal} />
+      )}
       <button className="close-modal-bttn" onClick={closeModal}>
         &times;
       </button>

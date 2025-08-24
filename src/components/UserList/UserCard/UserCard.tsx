@@ -9,8 +9,6 @@ import './UserCardStyles.scss';
 export default function UserCard({ user }: UserCardProps) {
   return (
     <div className="user-card">
-      <h2 className="user-card-title">User Profile</h2>
-
       {user.picture && (
         <div className="user-card-image">
           <img src={user.picture} alt="User" />

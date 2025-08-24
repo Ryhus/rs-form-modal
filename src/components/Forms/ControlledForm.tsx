@@ -21,7 +21,11 @@ import { fileToBase64 } from '@/utils/fileConversions';
 
 import './FormsStyles.scss';
 
-export default function ControlledForm() {
+interface ControlledFormProps {
+  onSuccess?: () => void;
+}
+
+export default function ControlledForm({ onSuccess }: ControlledFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
 
@@ -57,6 +61,7 @@ export default function ControlledForm() {
       ...data,
       picture: pictureBase64,
     });
+    if (onSuccess) onSuccess();
   };
 
   return (
